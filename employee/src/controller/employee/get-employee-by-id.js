@@ -6,14 +6,11 @@ module.exports = function makeGetEmployeeByIdAction({
     return async function getEmployeeByIdAction(req, res)
     {
         try {
-            let empid = req.params.id;
+            let id = req.params.id;
+            
+            validateInput({ id })
 
-            const { error } = validateGetEmployeeByIdAction({ empid })
-
-            if(error)
-                return res.status(400).send({"validation error": error.details[0].message})
-
-            let employeeDetails = await getEmployeeById({ empid });
+            let employeeDetails = await getEmployeeById({ id });
 
             res.send(employeeDetails);
         }
@@ -21,11 +18,14 @@ module.exports = function makeGetEmployeeByIdAction({
             res.send(error.message);
         }    
     }
-    function validateGetEmployeeByIdAction({ empid } )
+    function validateInput({ id } )
     {
         const schema = Joi.object({
-            empid: Joi.string().required(),
+            id: Joi.string().required(),
         })
-        return schema.validate({ empid })
+
+        const { error } = schema.validate({ id })
+        if(error)
+            return res.status(400).send({"validation error": error.details[0].message})
     }
 }

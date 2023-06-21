@@ -5,9 +5,11 @@ module.exports = function makeVerifyEmployeeAction({
     return async function verifyEmployeeAction(req, res)
     {
             let verificationToken = req.params.verificationToken;
-            let empid = req.params.empid;
 
-            let result = await verifyEmployee({ empid, verificationToken });
+            console.log({ verificationToken })
+
+            let result = await 
+            ({ verificationToken });
             
             if(result)
             {

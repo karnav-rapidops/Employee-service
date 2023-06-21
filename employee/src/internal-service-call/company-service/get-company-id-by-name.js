@@ -4,22 +4,20 @@ module.exports = function makeGetCompanyIdByName({
     Joi,
 })
 {
-    return async function getCompanyIdByName({ cname })
+    return async function getCompanyIdByName({ name })
     {
-        let companyid;
+        let companyId;
 
-        const axiosRes = await axios.get(`http://localhost:3000/company/byname/${cname}`);
-
-        console.log("Axios Result: ", axiosRes.data);
+        const axiosRes = await axios.get(`http://localhost:3000/company/byname/${name}`);
 
         if(!axiosRes.data.length)
         {
-            throw new objectNotFound(`company with name ${cname} does not exist!`)
+            throw new objectNotFound(`company with name ${name} does not exist!`)
         }
         else
         {
-            companyid = axiosRes.data[0].cid;
+            companyId = axiosRes.data;
         }
-        return companyid;
+        return companyId;
     }           
 }

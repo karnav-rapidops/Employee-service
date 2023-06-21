@@ -4,20 +4,20 @@ module.exports = function makeGetEmployeeById({
     Joi,
 })
 {
-    return async function getEmployeeById({ empid })
+    return async function getEmployeeById({ id })
     {
-        const {error} = validateGetEmployeeById({ empid })
+        const {error} = validateGetEmployeeById({ id })
         if(error)
             throw new validationError(error.message);
 
-        let employeeDetails = await getEmployeeByIdDb({ empid });
+        let employeeDetails = await getEmployeeByIdDb({ id });
         return employeeDetails;
     }
-    function validateGetEmployeeById({ empid } )
+    function validateGetEmployeeById({ id } )
     {
         const schema = Joi.object({
-            empid: Joi.string().required(),
+            id: Joi.string().required(),
         })
-        return schema.validate({ empid })
+        return schema.validate({ id })
     }
 }

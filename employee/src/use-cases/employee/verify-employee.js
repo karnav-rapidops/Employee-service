@@ -9,13 +9,10 @@ module.exports = function makeVerifyEmployee({
 
         const decoded = jwt.verify(verificationToken, secret);
 
-        console.log("decoded:\n", decoded);
-
-        if(decoded.employeeid)
-        {
-            let result = await updateVerificationstatusDb({status: 'true', empid: decoded.employeeid});
-        }
-
-        return decoded.employeeid;
+        
+            let result = await updateVerificationstatusDb({status: 'true', id: decoded.employeeId});
+        
+    
+        return 'employee is verified';
     }
 }

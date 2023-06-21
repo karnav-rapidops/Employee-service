@@ -4,31 +4,25 @@ module.exports = function makeUpdateEmployeeDesignation({
     Joi,
 })
 {
-    return async function updateEmployeeDesignation({ empid, designation })
+    return async function updateEmployeeDesignation({ id, designation })
     {   
-
-        console.log("\nUPDATE-EMPLOYEE-DESIGNATION-USECASE")
-        console.log("empid: ", empid);
-        console.log("designation: ", designation);
-
-        const {error} = validateUpdateEmployeeDesignation({ empid, designation })
+        const {error} = validateInput({ id, designation })
 
         if(error)
         {
             console.log(error.message);
             throw new validationError(error.message);
-            
         }
 
-        let updatedEmpId = await updateEmployeeDesignationDb({ empid, designation });
+        let updatedEmpId = await updateEmployeeDesignationDb({ id, designation });
         return updatedEmpId;
     }
-    function validateUpdateEmployeeDesignation({ empid, designation } )
+    function validateInput({ id, designation } )
     {
         const schema = Joi.object({
-            empid: Joi.string().required(),
+            id: Joi.string().required(),
             designation: Joi.string().min(1).max(15).required(),
         })
-        return schema.validate({ empid, designation })
+        return schema.validate({ id, designation })
     }
 }

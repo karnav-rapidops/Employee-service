@@ -6,15 +6,17 @@ module.exports = function makeUpdateEmployeeNameAction({
     return async function updateEmployeeNameAction(req, res)
     {
         try {
-            let empid = req.params.id;
-            let empname = req.body.name;
+            let id = req.params.id;
+            let name = req.body.name;
 
-            const { error } = validateUpdateEmployeeNameAction({ empid, empname })
+            console.log("Update-employee-name-usecase");
+
+            const { error } = validateInput({ id, name })
             
             if(error)
                 return res.status(400).send({"validation error": error.details[0].message})
                 
-            let updatedEmpId = await updateEmployeeName({ empid, empname });
+            let updatedEmpId = await updateEmployeeName({ id, name });
 
             res.send(updatedEmpId);
         }
@@ -22,12 +24,12 @@ module.exports = function makeUpdateEmployeeNameAction({
             res.send(error.message);
         }
     }
-    function validateUpdateEmployeeNameAction({ empid, empname } )
+    function validateInput({ id, name } )
     {
         const schema = Joi.object({
-            empname: Joi.string().min(1).max(15).required(),
-            empid: Joi.string().required(),
+            name: Joi.string().min(1).max(15).required(),
+            id: Joi.string().required(),
         })
-        return schema.validate({ empid, empname })
+        return schema.validate({ id, name })
     }
 }

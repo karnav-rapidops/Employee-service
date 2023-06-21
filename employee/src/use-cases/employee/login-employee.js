@@ -16,7 +16,7 @@ module.exports = function makeLoginEmployee({
         if(error) {
             throw validationError(error.message);
         }
-
+        
         // check whether user with email exist or not
         const employeeDetails = await isEmailExistDb({ email });
         if(!employeeDetails)
@@ -31,16 +31,16 @@ module.exports = function makeLoginEmployee({
             throw new forbiddenError('Verify your email!');
         
         // Generate sessionId for user who is going to be logged in 
-        const sessionid = uuid.v1();
+        const sessionId = uuid.v1();
 
         // Generate Access token 
-        let accesstoken = generateAccessToken({ empid: employeeDetails.empid, sessionid})
+        let accessToken = generateAccessToken({ empid: employeeDetails.empid, sessionId})
 
         // change country code into country name i.e 'IN' => 'India'
         changeCountryCodeIntoCountryName(locationData);
 
         // Insert into auth table
-        let insertedEmployeeId = await insertAuthDetailsDb({ empid: employeeDetails.empid, accesstoken, expiretime: Date.now() + 3600000, sessionid, ipaddress: locationData.ip, useragent, city: locationData.city, state: locationData.region, country: locationData.country })
+        let insertedEmployeeId = await insertAuthDetailsDb({ id: employeeDetails.empid, accessToken, expireTime: Date.now() + 3600000, sessionId, ipAddress: locationData.ip, useragent, city: locationData.city, state: locationData.region, country: locationData.country })
 
         return "Login successfull!";
     }
@@ -53,10 +53,10 @@ module.exports = function makeLoginEmployee({
 
         return schema.validate({ email, password })
     }
-    function generateAccessToken({ empid, sessionid })
+    function generateAccessToken({ empid, sessionId })
     {   
         const secret = 'mysecret';
-        let accessToken = jwt.sign({ empid, sessionid }, secret);
+        let accessToken = jwt.sign({ empid, sessionId }, secret);
         return accessToken;
     }
     function isPasswordValid({ enteredPassword, registeredPassword })

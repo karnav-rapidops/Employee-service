@@ -6,13 +6,13 @@ module.exports = function makeDeleteEmployeeByIdAction({
     return async function deleteEmployeeByIdAction(req, res)
     {
         try {
-            let empid = req.params.id;
+            let id = req.params.id;
 
-            const { error } = validateDeleteEmployeeByIdAction({ empid })
+            const { error } = validateInput({ id })
             if(error)
                 return res.status(400).send({"validation error": error.details[0].message})
 
-            let deletedEmpId = await deleteEmpployeeById({ empid });
+            let deletedEmpId = await deleteEmpployeeById({ id });
 
             res.send(deletedEmpId);
         }
@@ -20,11 +20,11 @@ module.exports = function makeDeleteEmployeeByIdAction({
             res.send(error.message)
         }
     }
-    function validateDeleteEmployeeByIdAction({ empid } )
+    function validateInput({ id } )
     {
         const schema = Joi.object({
-            empid: Joi.string().required(),
+            id: Joi.string().required(),
         })
-        return schema.validate({ empid })
+        return schema.validate({ id })
     }
 }

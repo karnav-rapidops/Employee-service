@@ -23,11 +23,10 @@ async function runConsumer()
                     partition,
                     offset: message.offset, 
                 });
-            console.log("Object from producer: ", JSON.parse(message.value))
             
             const data = JSON.parse(message.value)
 
-            await email.sendEmail({ empname: data.empname , toEmail: 'krnvgmt@gmail.com', verificationToken: data.verificationToken });
+            await email.sendEmail({ name: data.name , toEmail: 'krnvgmt@gmail.com', verificationToken: data.verificationToken });
     }
 })
 }

@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
 const exception = require('../exceptions');
+const multer = require('multer');
 const { authDbMethods } = require('../data-access/cockroach'); 
-const makeVerifyAccessToken = require('./verifyAccessToken');
 
+const makeVerifyAccessToken = require('./verifyAccessToken');
 
 const verifyAccessToken = makeVerifyAccessToken({
     updateExpireTimeDb: authDbMethods.updateExpireTime,
@@ -11,7 +12,7 @@ const verifyAccessToken = makeVerifyAccessToken({
     jwt,
 });
 
+
 module.exports = Object.freeze({
     verifyAccessToken,
-    
 })

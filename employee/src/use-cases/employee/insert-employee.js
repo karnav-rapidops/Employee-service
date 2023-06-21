@@ -9,50 +9,50 @@ module.exports = function makeInsertEmployee({
     jwt,
 })
 {
-    return async function insertEmployee({ empname, designation, email, cname, password })
+    return async function insertEmployee({ name, designation, email, companyName, password })
     {
-        const {error} = validateInsertEmployee({ cname, empname, email, designation, password })
+        const {error} = validateInput({ companyName, name, email, designation, password })
         if(error)
             throw new validationError(error.message);
 
         // Check if email already registered or not , give forbidden error otherwise
-        // let employeeDetails = await isEmailExistDb({ email })
-        // if(employeeDetails)
-        //     throw new forbiddenError('Email already exist!');
-
-        let cid = await getCompanyIdByName({ cname });
-
-        let employeeid = await insertEmployeeDb({ empname, designation, email, cid, password });  
-
+        let employeeDetails = await isEmailExistDb({ email });
+        if(employeeDetails)
+            throw new forbiddenError('Email already exist!');
+        let companyId = await getCompanyIdByName({ name: companyName });
+        console.log("companyId", companyId);
+        let employeeId = await insertEmployeeDb({ name, designation, email, companyId, password });  
+        console.log("employeeId",employeeId);
+        
         // Generate JWT verification token
-        let verificationToken = generateVerificationToken({ employeeid })
+        let verificationToken = generateVerificationToken({ employeeId })
 
         // Sending employeeName, employeeEmail, companyName, verification_token in producer
         await producer({ 
             topic: 'employee-registred',
-            message: { employeeid, empname, email, cname, verificationToken } 
+            message: { employeeId, name, email, companyName, verificationToken } 
         })
 
-        return employeeid;        
+        return employeeId;        
     }
 
-    function validateInsertEmployee({ cname, empname, email, designation, password   })
+    function validateInput({ companyName, name, email, designation, password })
     {
         const schema = Joi.object({
-            empname: Joi.string().min(1).max(15).required(),
+            name: Joi.string().min(1).max(15).required(),
             designation: Joi.string().min(1).max(15).required(),
             email: Joi.string().required(),
-            cname: Joi.string().min(1).max(15).required(),
+            companyName: Joi.string().min(1).max(15).required(),
             password: Joi.string().max(15).required(),
         })
-        return schema.validate({ cname, empname, email, designation, password })
+        return schema.validate({ companyName, name, email, designation, password })
     }
 
-    function generateVerificationToken({ employeeid })
+    function generateVerificationToken({ employeeId })
     {
         const secret = 'mysecret';
 
-        let verificationToken = jwt.sign({employeeid}, secret, {expiresIn: '1h'})
+        let verificationToken = jwt.sign({employeeId}, secret, {expiresIn: '1h'})
         return verificationToken;
     }
 }

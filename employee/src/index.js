@@ -7,6 +7,7 @@ require('dotenv').config();
 
 app.use(express.json());
 app.use('/', router);
+app.use(express.static('public'))
 
 app.listen(port, ()=>{
     console.log(`Employee service running on port ${port}`);

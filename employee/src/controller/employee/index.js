@@ -1,5 +1,6 @@
 const employee = require('../../use-cases/employee');
-const Joi = require('joi')
+const Joi = require('joi');
+const file = require('../../use-cases/file')
 
 const makeInsertEmployeeAction = require('./insert-employee');
 const makeUpdateEmployeeNameAction = require('./update-employee-name');
@@ -47,16 +48,20 @@ const verifyEmployeeAction = makeVerifyEmployeeAction({
 })
 const loginEmployeeAction = makeLoginEmployeeAction({
     loginEmployee: employee.loginEmployee,
-    getEmployeeLocation: employee.getEmployeeLocation,    
+    getEmployeeLocation: employee.getEmployeeLocation, 
+    Joi,   
 })
 const getAllSessionsAction = makeGetAllSessionsAction({
     getAllSessions: employee.getAllSessions,
+    Joi,
 })
 const searchSessionsAction = makeSearchSessionsAction({
     searchSessions: employee.searchSessions,
+    Joi,
 })
 const deleteSessionsAction = makeDeleteSessionsAction({
     deleteSessions: employee.deleteSessions,
+    Joi,
 })
 
 

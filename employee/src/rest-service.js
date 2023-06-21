@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
+const upload = require('./middleware/file-upload');
 const middeleware = require('./middleware');
 const controllers = require('./controller');
 
 initEmployeeRoutes();
+initFileRoutes();
 
 function initEmployeeRoutes()
 {
@@ -43,6 +45,12 @@ function initEmployeeRoutes()
     router.delete('/employee/company/:id', middeleware.verifyAccessToken, (req, res)=>{
         controllers.employee.deleteEmployeeByCompanyIdAction(req, res);
     })
+}
+
+function initFileRoutes()
+{
+    router.post('/employee/file/upload', upload.single('file') , controllers.file.uploadFileAction);
+    router.get('/employee/file/download/:fileName', controllers.file.downloadFileAction);
 }
 
 

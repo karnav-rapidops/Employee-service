@@ -6,16 +6,12 @@ module.exports = function makeGetEmployeeByCompanyNameAction({
     return async function getEmployeeByCompanyNameAction(req, res)
     {
         try {
-            let companyname = req.params.companyname;
 
-            console.info("\nGET-EMPLOYEE-BY-COMPANY-NAME-CONTROLLER")
-            console.info("company name: ", companyname);
+            let companyName = req.params.companyName;
 
-            const { error } = validateGetEmployeeByCompnayNameAction({ cname: companyname })
-            if(error)
-                return res.status(400).send({"validation error": error.details[0].message})
+            validateInput({ companyName, res });
 
-            let employeeList = await getEmployeeByCompanyName({ cname: companyname });
+            let employeeList = await getEmployeeByCompanyName({ companyName });
 
             res.send(employeeList);
         }
@@ -23,11 +19,14 @@ module.exports = function makeGetEmployeeByCompanyNameAction({
             res.send(error.message);
         }
     }
-    function validateGetEmployeeByCompnayNameAction({ cname } )
+    function validateInput({ companyName, res })
     {
         const schema = Joi.object({
-            cname: Joi.string().min(1).max(15).required(),
+            companyName: Joi.string().min(1).max(15).required(),
         })
-        return schema.validate({ cname })
+         
+        const { error } = schema.validate({ companyName })
+        if(error)
+             return res.status(400).send({"validation error": error.details[0].message})
     }
 }

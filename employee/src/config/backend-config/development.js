@@ -17,7 +17,14 @@ const config = {
         ssl:{
             rejectUnauthorized: false
         }
-    }
+    },
+    gcpStorage: {
+        projectId: 'experro-dev',
+        bucketName: 'experro-dev',
+        keyFileName: '',
+        folderName: 'trainee-data',
+    },
+    
 }
 
 module.exports = config;

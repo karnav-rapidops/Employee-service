@@ -5,7 +5,7 @@ module.exports = function makeLoginEmployeeAction({
 {
     return async function loginEmployeeAction(req, res)
     {
-        try {
+        try {            
             let email = req.body.email;
             let password = req.body.password;
             let useragent = req.headers.useragent;

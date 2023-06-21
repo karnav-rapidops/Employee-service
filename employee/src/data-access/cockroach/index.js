@@ -2,7 +2,7 @@
 
 const { Pool } = require('pg');
 const config = require('../../config');
-
+const { databaseError } = require('../../exceptions')
 
 const pool = new Pool({
     host: config.cockroach.host,
@@ -21,15 +21,17 @@ pool.connect()
 
 // ----------------------------------- use-cases -----------------------------------------
 
-const makeEmployeeDbMethods = require('./employee-db-methods');
-const makeAuthDbMethods = require('./auth-db-methods');
+const makeEmployeeDbMethods = require('./employee-db');
+const makeAuthDbMethods = require('./auth-db');
 
 const employeeDbMethods = makeEmployeeDbMethods({
     pool,
+    databaseError,
 });
 
 const authDbMethods = makeAuthDbMethods({
     pool,
+    databaseError,
 })
 
 

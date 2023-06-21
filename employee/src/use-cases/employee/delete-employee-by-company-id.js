@@ -4,24 +4,21 @@ module.exports = function makeDeleteEmployeeByCompanyId({
     Joi,
 })
 {
-    return async function deleteEmployeeByCompanyId({ cid })
+    return async function deleteEmployeeByCompanyId({ id })
     {
-        // console.info("\nDELETE-EMPLOYEE-BY-COMPANY-ID-USECASE")
-        // console.info("company id: ", cid);
+        validateInput({ id })
+        return await deleteEmployeeByCompanyIdDb({ id });
+    }
+    
+    function validateInput({ id } )
+    {
+        const schema = Joi.object({
+            id: Joi.string().required(),
+        })
 
-        const {error} = validateDeleteEmployeeByCompanyId({ cid })
+        const {error} = schema.validate({ id })
 
         if(error)
             throw new validationError(error.message);
-
-        let deletedCompanyId = await deleteEmployeeByCompanyIdDb({ cid });
-        return deletedCompanyId;
-    }
-    function validateDeleteEmployeeByCompanyId({ cid } )
-    {
-        const schema = Joi.object({
-            cid: Joi.string().required(),
-        })
-        return schema.validate({ cid })
     }
 }

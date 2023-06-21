@@ -2,13 +2,14 @@ const { getCompanyIdByName } = require('../../internal-service-call/company-serv
 const dbMethods = require('../../data-access');
 const exceptions = require('../../exceptions');
 const { producer } = require('../kafka')
+const { gcpStorage } = require('../../config')
 
 // NPMs 
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
 const uuid = require('uuid');
 const Joi = require('joi');
-const ipinfo = require('ipinfo')
+const ipinfo = require('ipinfo');
 
 // Import maker functions of use-cases
 const makeInsertEmployee = require('./insert-employee');
@@ -88,10 +89,14 @@ const getEmployeeLocation = makeGetEmployeeLocation({
 
 const getAllSessions = makeGetAllSessions({
     getAllSessionsDb: dbMethods.cockroach.authDbMethods.getAllSessions,
+    validationError: exceptions.validationError,
+    Joi,
 })
 
 const searchSessions = makeSearchSessions({
     searchSessionsDb: dbMethods.cockroach.authDbMethods.searchSessions,
+    validationError: exceptions.validationError,
+    Joi,
 })
 
 const deleteSessions = makeDeleteSessions({
@@ -124,4 +129,5 @@ module.exports = Object.freeze({
     getAllSessions,
     searchSessions,
     deleteSessions,
+
 })

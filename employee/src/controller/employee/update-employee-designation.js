@@ -6,15 +6,15 @@ module.exports = function makeUpdateEmployeeDesignationAction({
     return async function updateEmployeeDesignationAction(req, res)
     {
         try {
-            let empid = req.params.id;
+            let id = req.params.id;
             let designation = req.body.designation;
 
-            const { error } = validateUpdateEmployeeDesignationAction({ empid, designation })
+            const { error } = validateInput({ id, designation })
             
             if(error)
                 return res.status(400).send({"validation error": error.details[0].message})
 
-            let updatedEmpId = await updateEmployeeDesignation({ empid, designation });
+            let updatedEmpId = await updateEmployeeDesignation({ id, designation });
 
             res.send(updatedEmpId);
         }
@@ -22,12 +22,12 @@ module.exports = function makeUpdateEmployeeDesignationAction({
             res.send(error.message);
         }
     }
-    function validateUpdateEmployeeDesignationAction({ empid, designation } )
+    function validateInput({ id, designation } )
     {
         const schema = Joi.object({
+            id: Joi.string().required(),
             designation: Joi.string().min(1).max(15).required(),
-            empid: Joi.string().required(),
         })
-        return schema.validate({ empid, designation })
+        return schema.validate({ id, designation })
     }
 }

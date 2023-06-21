@@ -4,21 +4,21 @@ module.exports = function makeDeleteEmployeeById({
     Joi,
 })
 {
-    return async function deleteEmployeeById({ empid })
+    return async function deleteEmployeeById({ id })
     {
-        const {error} = validateDeleteEmployeeById({ empid })
+        validateInput({ id });
+
+        return await deleteEmployeeByIdDb({ id });
+    }
+    function validateInput({ id })
+    {
+        const schema = Joi.object({
+            id: Joi.string().required(),
+        })
+
+        const {error} = schema.validate({ id });
 
         if(error)
             throw new validationError(error.message);
-
-        let deletedEmpId = await deleteEmployeeByIdDb({ empid });
-        return deletedEmpId;
-    }
-    function validateDeleteEmployeeById({ empid } )
-    {
-        const schema = Joi.object({
-            empid: Joi.string().required(),
-        })
-        return schema.validate({ empid })
     }
 }

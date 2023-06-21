@@ -5,28 +5,25 @@ module.exports = function makeGetEmployeeByCompnayName({
     Joi,
 })
 {
-    return async function makeGetEmployeeByCompnayName({ cname })
+    return async function getEmployeeByCompnayName({ companyName })
     {   
-        console.info("\nGET-EMPLOYEE-BY-COMPANY-ID-USECASE");
-        console.info("company name: ", cname);
+        
+        validateInput({ companyName });
 
-        const {error} = validateGetEmployeeByCompnayName({ cname })
-        if(error)
-            throw new validationError(error.message);
-
-        let companyid = await getCompanyIdByName({ cname });
+        let companyId = await getCompanyIdByName({ companyName });
     
-        let employeeList = await getEmployeeByCompanyIdDb({ cid: companyid});
-
-        console.info("GET-EMPLOYEE-BY-COMPANY-ID-USECASE-RESULT: ", employeeList);
+        let employeeList = await getEmployeeByCompanyIdDb({ id: companyId});
 
         return employeeList;
-    }
-    function validateGetEmployeeByCompnayName({ cname } )
+    }   
+
+    function validateInput({ companyName } )
     {
         const schema = Joi.object({
-            cname: Joi.string().min(1).max(15).required(),
+            companyName: Joi.string().min(1).max(15).required(),
         })
-        return schema.validate({ cname })
+        const {error} = schema.validate({ companyName })
+        if(error)
+            throw new validationError(error.message);
     }
 }

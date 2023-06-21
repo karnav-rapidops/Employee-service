@@ -7,10 +7,10 @@ module.exports = function makeSearchSessionsAction({
         try {
            let searchField = req.params.searchField;
            let searchValue = req.params.searchValue;
-           let empid = req.params.empid;
+           let id = req.params.id;
            let sortingOrder = req.body.sortingOrder;
 
-            let sessionsList = await searchSessions({ searchField, searchValue, empid, sortingOrder })
+            let sessionsList = await searchSessions({ searchField, searchValue, id, sortingOrder })
             
            res.send(sessionsList);
            

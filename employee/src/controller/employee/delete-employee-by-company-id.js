@@ -6,28 +6,29 @@ module.exports = function makeDeleteEmployeeByCompanyIdAction({
     return async function deleteEmployeeByCompanyIdAction(req, res)
     {
         try {
-            let cid = req.params.id;
+            let id = req.params.id;
 
-            console.info("\nDELETE-EMPLOYEE-BY-COMPANY-ID-CONTROLLER");
-            console.info("company id: ", cid);
-
-            const { error } = validateDeleteEmployeeByCompanyId({ cid })
+            const { error } = validateInput({ id })
             if(error)
-                return res.status(400).send({"validation error": error.details[0].message})
+            {
+                console.log("error",error)
+                res.status(400).send({"validation error": error.details[0].message})
+            }
 
-            let deletedCompanyId = await deleteEmployeeByCompanyId({ cid });
+            let deletedCompanyId = await deleteEmployeeByCompanyId({ id });
 
-            res.send("deletedCompanyId");
+            res.send(deletedCompanyId);
         }
         catch(error) {
+            console.log("catch",error);
             res.send(error.message);
         }
     }
-    function validateDeleteEmployeeByCompanyId({ cid } )
+    function validateInput({ id } )
     {
         const schema = Joi.object({
-            cid: Joi.string().required(),
+            id: Joi.string().required(),
         })
-        return schema.validate({ cid })
+        return schema.validate({ id })
     }
 }
