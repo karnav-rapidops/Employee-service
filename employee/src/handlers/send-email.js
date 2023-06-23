@@ -26,7 +26,7 @@ async function runConsumer()
             
             const data = JSON.parse(message.value)
 
-            await email.sendEmail({ name: data.name , toEmail: 'krnvgmt@gmail.com', verificationToken: data.verificationToken });
+            await email.sendEmail({ name: data.name , toEmail: data.email, verificationToken: data.verificationToken });
     }
 })
 }

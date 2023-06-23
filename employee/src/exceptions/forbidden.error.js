@@ -7,7 +7,7 @@ class ForbiddenError extends Error {
     }
 
     this.name = 'ForbiddenError';
-    this.httpStatusCode=403;
+    this.httpStatusCode = 403;
   }
 }
 module.exports=ForbiddenError;

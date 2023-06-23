@@ -10,18 +10,17 @@ module.exports = function makeLoginEmployeeAction({
             let password = req.body.password;
             let useragent = req.headers.useragent;
             let clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-            // clientIp = '202.131.125.122';
 
             // Get user location information
             let locationData = await getEmployeeLocation({ clientIp });
 
             // call to login-usecase 
-            let result = await loginEmployee({ email, password, useragent, locationData });
-
-            res.send(result);
+            let accessToken = await loginEmployee({ email, password, useragent, locationData });
+            res.setHeader('authorization',accessToken);
+            res.status(200).send('Login Successfull!!');
         }
         catch(error) {
-            res.send(error.message);
+            res.status(500).send(error.message);
         }
     }
 }

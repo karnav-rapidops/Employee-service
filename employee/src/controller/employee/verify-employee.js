@@ -4,20 +4,22 @@ module.exports = function makeVerifyEmployeeAction({
 {
     return async function verifyEmployeeAction(req, res)
     {
+        try {
             let verificationToken = req.params.verificationToken;
 
-            console.log({ verificationToken })
-
-            let result = await 
-            ({ verificationToken });
+            let result = await verifyEmployee({ verificationToken });
             
             if(result)
             {
-                res.send("Token verified!");
+                res.status(200).send("Token verified!");
             }
             else{
-                res.send("Invalid token or token expired!");
+                res.status(401).send("Invalid token or token expired!");
             }
 
+        } catch (error) {
+            res.status(error.httpStatusCode).send(error.message);   
+        }
+            
     }
 }

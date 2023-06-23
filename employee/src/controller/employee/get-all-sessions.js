@@ -14,20 +14,10 @@ module.exports = function makeGetAllSessionsAction({
 
             let sessionsList = await getAllSessions({ id, columnToSort, sortingOrder });
 
-            res.send(sessionsList);
+            res.status(200).send(sessionsList);
         }
         catch(error) {
-            res.send(error.message);
+            res.status(error.httpStatusCode).send(error.message);
         }
     }
-    function validateInput({ id, columnToSort, sortingOrder })
-    {
-        const schema = Joi.object({
-            id: Joi.string().required(),
-            columnToSort: Joi.string().required(),
-            sortingOrder: Joi.string().required(),
-        })
-        const {error} = schema.validate({ id, columnToSort, sortingOrder })
-        if(error)
-            return res.status(400).send({"validation error": error.details[0].message})    }
 }

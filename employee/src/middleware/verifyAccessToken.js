@@ -7,14 +7,16 @@ module.exports = function makeVerifyAccessToken({
 {
     return async function verifyAccessToken(req, res, next)
     {
-        const accesstoken = req.headers.accesstoken;
+        
+
+        var accessTokenWithBearer = req.headers.authorization;
+        var accesstoken = accessTokenWithBearer.replace('Bearer ', '');
     
         const secret = 'mysecret';
 
         await jwt.verify(accesstoken, secret, async (error, decoded)=>{
             if(error) {
-                console.log("verifytoken",error);
-                res.send("Aceess token invalid!");
+                res.status(401).send("Aceess token invalid!");
             }
             else {
                 // If accesstoken is valid then check its expiretime
@@ -24,11 +26,15 @@ module.exports = function makeVerifyAccessToken({
 
                 let isAccessTokenExpired = await checkIsAccessTokenExpired({ getExpireTimeDb, sessionId });
 
+                // If accessToken expired send message otherwise update expireTime
                 if(isAccessTokenExpired)
-                    res.send("Access token expired!");
+                    res.status(401).send("Access token expired!");
                 else {
-                    // Update expiretime of accesstoken for user.
-                    let empid = await updateExpireTimeDb({ sessionId, newExpireTime: Date.now() + 3600000 })
+
+                    let id = await updateExpireTimeDb({ sessionId, newExpireTime: Date.now() + 3600000 });
+
+                    req.id = id;
+
                 }
             }
         })

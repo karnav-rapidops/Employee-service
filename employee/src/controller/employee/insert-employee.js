@@ -13,29 +13,13 @@ module.exports = function makeInsertEmployeeAction({
             let companyName = req.body.companyName;
             let password = req.body.password;
 
-            const {error} = validateInput({ name, designation, email, companyName, password })
-
-            if(error)
-                return res.status(400).send({"validation error": error.details[0].message})
-                
-            let employeeid = await insertEmployee({ name, designation, email, companyName, password });
+            let employeeId = await insertEmployee({ name, designation, email, companyName, password });
             
-            res.status(201).send(employeeid);  
+            res.status(201).send(employeeId);  
         }
-        catch(err) {
-            console.error(err);
-            res.status(err.httpStatusCode).send(err.message);
+        catch(error) {
+            console.error(error);
+            res.status(error.httpStatusCode).send(error.message);
         }   
-    }
-    function validateInput({ name, designation, email, companyName, password})
-    {
-        const schema = Joi.object({
-            name: Joi.string().min(1).max(15).required(),
-            designation: Joi.string().min(1).max(15).required(),
-            email: Joi.string().required(),
-            companyName: Joi.string().min(1).max(15).required(),
-            password: Joi.string().max(15).required(),
-        })
-        return schema.validate({ name, designation, email, designation, companyName, password })
     }
 }

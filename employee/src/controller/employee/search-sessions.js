@@ -12,11 +12,11 @@ module.exports = function makeSearchSessionsAction({
 
             let sessionsList = await searchSessions({ searchField, searchValue, id, sortingOrder })
             
-           res.send(sessionsList);
+           res.status(500).send(sessionsList);
            
         }
         catch(error) {
-            res.send(error.message);
+            res.status(error.httpStatusCode).send(error.message);
         }
     }
     

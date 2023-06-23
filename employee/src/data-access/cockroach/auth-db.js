@@ -25,7 +25,9 @@ module.exports = function makeAuthDbMethods({
     }
     async function getExpireTime({ sessionId })
     {
+        console.log(sessionId);
         let result = await pool.query(`SELECT expiretime FROM ${authTable} WHERE sessionid = $1`, [sessionId]);
+        console.log(result.rows);
 
         return result.rows[0].expiretime;
     }

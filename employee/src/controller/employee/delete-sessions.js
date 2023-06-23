@@ -5,15 +5,15 @@ module.exports = function makeDeleteSessionsAction({
     return async function getAllSessionsAction(req, res)
     {
         try {
-           let sessionsToDelete = req.body.sessionsToDelete;
+            let sessionsToDelete = req.body.sessionsToDelete;
 
             let employeeId = await deleteSessions({ sessionsToDelete });
 
-           res.send(employeeId);
+           res.status(200).send(employeeId);
            
         }
         catch(error) {
-            res.send(error.message);
+            res.status(error.httpStatusCode).send(error.message);
         }
     }
     

@@ -11,20 +11,23 @@ module.exports = function makeInsertEmployee({
 {
     return async function insertEmployee({ name, designation, email, companyName, password })
     {
+        console.log("Insert-employee-usecase");
+
         const {error} = validateInput({ companyName, name, email, designation, password })
         if(error)
             throw new validationError(error.message);
 
         // Check if email already registered or not , give forbidden error otherwise
-        let employeeDetails = await isEmailExistDb({ email });
-        if(employeeDetails)
-            throw new forbiddenError('Email already exist!');
+        // let employeeDetails = await isEmailExistDb({ email });
+        // if(employeeDetails)
+        //     throw new forbiddenError('Email already exist!');
+
         let companyId = await getCompanyIdByName({ name: companyName });
-        console.log("companyId", companyId);
-        let employeeId = await insertEmployeeDb({ name, designation, email, companyId, password });  
-        console.log("employeeId",employeeId);
         
-        // Generate JWT verification token
+        let employeeId = await insertEmployeeDb({ name, designation, email, companyId, password });  
+        
+        
+        // Generate JWT verification token  
         let verificationToken = generateVerificationToken({ employeeId })
 
         // Sending employeeName, employeeEmail, companyName, verification_token in producer

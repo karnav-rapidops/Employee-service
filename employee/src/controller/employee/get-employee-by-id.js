@@ -7,25 +7,12 @@ module.exports = function makeGetEmployeeByIdAction({
     {
         try {
             let id = req.params.id;
-            
-            validateInput({ id })
-
             let employeeDetails = await getEmployeeById({ id });
 
-            res.send(employeeDetails);
+            res.status(200).send(employeeDetails);
         }
         catch(error){
-            res.send(error.message);
+            res.status(500).send(error.message);
         }    
-    }
-    function validateInput({ id } )
-    {
-        const schema = Joi.object({
-            id: Joi.string().required(),
-        })
-
-        const { error } = schema.validate({ id })
-        if(error)
-            return res.status(400).send({"validation error": error.details[0].message})
     }
 }

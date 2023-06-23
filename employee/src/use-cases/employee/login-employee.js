@@ -42,7 +42,7 @@ module.exports = function makeLoginEmployee({
         // Insert into auth table
         let insertedEmployeeId = await insertAuthDetailsDb({ id: employeeDetails.empid, accessToken, expireTime: Date.now() + 3600000, sessionId, ipAddress: locationData.ip, useragent, city: locationData.city, state: locationData.region, country: locationData.country })
 
-        return "Login successfull!";
+        return accessToken;
     }
     function validateLoginEmployee({ email, password })
     {

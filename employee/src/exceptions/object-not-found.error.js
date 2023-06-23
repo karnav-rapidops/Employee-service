@@ -7,7 +7,7 @@ class ObjectNotFoundError extends Error {
     }
 
     this.name = 'ObjectNotFound';
-    this.httpStatusCode=404;
+    this.httpStatusCode = 404;
 
   }
 }

@@ -23,6 +23,8 @@ pool.connect()
 
 const makeEmployeeDbMethods = require('./employee-db');
 const makeAuthDbMethods = require('./auth-db');
+const makeRoleDbMethods = require('./role-db');
+const makeEmployeeRoleAssociationDbMethods = require('./employee-role-association-db');
 
 const employeeDbMethods = makeEmployeeDbMethods({
     pool,
@@ -34,8 +36,19 @@ const authDbMethods = makeAuthDbMethods({
     databaseError,
 })
 
+const roleDbMethods = makeRoleDbMethods({
+    pool,
+    databaseError,
+})
+
+const employeeRoleAssociationDbMethods = makeEmployeeRoleAssociationDbMethods({
+    pool,
+    databaseError,
+})
 
 module.exports = Object.freeze({
     employeeDbMethods,  
     authDbMethods,
+    roleDbMethods,
+    employeeRoleAssociationDbMethods,
 })
